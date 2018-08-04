@@ -126,11 +126,14 @@ def movie(request):
         print("-------------")
         print(movie)
         serializer = MovieSerializer(data=movie)
+        print("after serializer")
         if serializer.is_valid():
+            print("inside serialization")
             serializer.save()
             resp = {"fetched_api_data": org_movie}
             resp.update(serializer.data)
-            return JsonResponse(resp, status=201)
+            print("after resp", resp)
+            return JsonResponse(resp, status=201, safe=False)
         print(serializer.errors)
         return JsonResponse(serializer.errors, status=400)
 

@@ -93,8 +93,6 @@ I created simple frontend to test basic functionality of the nodes, should give 
 **Response**<br />
 type: `application/json` full movie object and data fetched from API (available under `fetched_api_data` in json object)<br />
 
-
-------------
 ##### /comments
 **Parametes**<br />
 `movie_id` **required** movie id to create comment to<br />
@@ -115,7 +113,6 @@ type: `application/json` comment object<br />
 **Response**<br />
 type: `application/json` fetch all movies (depends on applied filters)<br />
 
-------------
 ##### /comments
 **Parametes**<br />
 `movie_id` **optional** filter comments bt movie id<br />

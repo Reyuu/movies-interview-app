@@ -4,7 +4,7 @@ REST API movie lookup tool written in python3 using Django and djangorestframewo
 
 You can find hosted instance [here](http://movies.uguu.space/).
 
-##Installation
+## Installation
 
 Clone repository
 `$ git clone https://github.com/Reyuu/movies-interview-app.git`
@@ -20,30 +20,30 @@ Activate your venv:
 
 Your prompt should change to something like this:
 `(venv) $`
-###Requirements
+### Requirements
 Requirements are contained in **requirements.txt** file.
 
 Install:
 `$ pip install -r requirements.txt`
 
-###Configuration
+### Configuration
 This app operates by use of enviromental variables. So you either set them up in your platform or you set them inside **wsgi.py** file.
 
 ####Enviromental variables reference
 ------------
-#####SECRET_KEY
+##### SECRET_KEY
 Django secret key.
 
 ------------
-#####OMDBAPI_KEY
+##### OMDBAPI_KEY
 Omdbapi.com api key.
 
 ------------
-#####DJANGO_HOST
+##### DJANGO_HOST
 Host allowed, you should usually set this for your domain name.
 
 ------------
-####wsgi.py setup
+#### wsgi.py setup
 I recommend setting up your wsgi.py like below if you're going to host it using Apache soulution (how to [here](https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-apache-and-mod_wsgi-on-ubuntu-16-04#configure-apache))
 
 	import os
@@ -68,7 +68,7 @@ I recommend setting up your wsgi.py like below if you're going to host it using 
 
 	application = get_wsgi_application()
 
-####Database
+#### Database
 Default backend is set to MySQL, although you're free to use anything. To change that edit **settings.py** according to Django documentation about [database backends](https://docs.djangoproject.com/en/2.0/ref/databases/ "database backends").
 
 Default **.cnf** file for MySQL is set to **/etc/mysql/intapi.cnf**. You can change that in **settings.py**:
@@ -82,14 +82,14 @@ Default **.cnf** file for MySQL is set to **/etc/mysql/intapi.cnf**. You can cha
 		}
 	}
 
-##Usage
-###Frontend
+## Usage
+### Frontend
 I created simple frontend to test basic functionality of the nodes, should give you basic idea how to build on top of that.
 
-###REST API
+### REST API
 
-####POST
-#####/movies
+#### POST
+##### /movies
 **Parametes**
 `title` **required** movie title to fetch
 
@@ -98,7 +98,7 @@ type: `application/json` full movie object and data fetched from API (available 
 
 
 ------------
-#####/comments
+##### /comments
 **Parametes**
 `movie_id` **required** movie id to create comment to
 `comment` **required** comment text
@@ -106,8 +106,8 @@ type: `application/json` full movie object and data fetched from API (available 
 **Response**
 type: `application/json` comment object
 
-####GET
-#####/movies
+#### GET
+##### /movies
 **Parametes**
 `title` **optional** movie title filter
 `year` **optional** year filter
@@ -119,7 +119,7 @@ type: `application/json` comment object
 type: `application/json` fetch all movies (depends on applied filters)
 
 ------------
-#####/comments
+##### /comments
 **Parametes**
 `movie_id` **optional** filter comments bt movie id
 

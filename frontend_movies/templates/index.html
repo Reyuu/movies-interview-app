@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+    <style>
+        .result{
+            border: 1px solid black;
+        }
+        .comments{
+            overflow-y:scroll;
+            height: 200px;
+        }
+        .comment{
+            margin: 2px;
+            font-weight: bold;
+            border: 1px solid black;
+        }
+    </style>
+    <script>
+    function createOneComment(cbody){
+        return "<div class='comment'><span class='comment_body'>"+cbody+"</span></div><br>\n"
+    }
+    function getComments(d){
+        console.log(d);
+        var my_comments = "";
+        for(comment in d){
+            console.log(d[comment]["comment_body"]);
+            my_comments = my_comments+createOneComment(d[comment]["comment_body"]);
+        }
+        return my_comments;
+    }
+    function createResult(da){
+        return '<div id="result'+da["id"]+'" class="result">\
+                <img width="240" height="320" src="'+da["Poster"]+'"><br>\
+                Title: <span id="title">'+da["Title"]+'</span><br>\
+                Year: <span id="year">'+da["Year"]+'</span><br>\
+                Plot: <span id="plot">'+da["Plot"]+'</span><br>\
+                Production: <span id="production">'+da["Production"]+'</span><br>\
+            <textarea id="commend_body" placeholder="Write your comment here!"></textarea>\
+            <button id="'+da["id"]+'" class="comment_button">Comment</button>\
+            <div id="comments'+da["id"]+'" class="comments">\
+            <span>Comments:</span>\
+            '+getComments(da["id"])+'\
+            </div>\
+        </div>'
+    }
+    $(function(){
+        $("#submit").on("click", function(){
+            console.log($("#search").val())
+            var t = $("#search").val();
+            $.post("/movies", {title: t}, function(data, status){
+                console.log(data);
+                $("#results").empty().append(createResult(data));
+            }
+            ).fail(
+                function(jqXHR, textStatus, errorThrown){
+                    console.log(jqXHR.status);
+                    if (jqXHR.status >= 400){
+                        $.get("/movies", {title: t},function(data, status){
+                            console.log(data);
+                            $("#results").empty();
+                            for(i in data){
+                                console.log(i);
+                                $("#results").append(createResult(data[i]));
+                                $.get("/comments", {movie_id: data[i]["id"]}, function(deta, status){
+                                    $("#comments"+data[i]["id"]).append(getComments(deta));
+                                });
+                            }
+                        });
+                    }
+                }
+            );
+        });
+    })
+    $(document.body).on("click", ".comment_button", function(){
+        var comment_body_val = $(this).siblings("textarea").val();
+        var comment_textarea = $(this).siblings("textarea");
+        var comments = $(this).siblings(".comments");
+        $.post("/comments", {comment: comment_body_val, movie_id: $(this).attr("id")}, function(data, status){
+            comment_textarea.val("");
+            comments.append(createOneComment(data["comment_body"]));
+        }).fail(
+            function(jqXHR, textStatus, errorThrown){
+                console.log(jqXHR.responseText);
+            }
+        )
+    });
+    </script>
+    <div>
+        <span>Search for a movie</span>
+        <input type="search" id="search">
+        <button id="submit">Submit</button>
+    </div>
+    <div id="results">
+    </div>
+</body>
+</html>

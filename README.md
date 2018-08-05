@@ -15,7 +15,7 @@ Setup virtualenv:<br />
 If your OS has Python 2.7 by default:<br />
 `$ virtualenv -p python3 venv`
 
-Activate your venv:
+Activate your venv:<br />
 `$ source venv/bin/activate`
 
 Your prompt should change to something like this:<br />

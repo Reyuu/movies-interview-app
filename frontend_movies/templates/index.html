@@ -27,10 +27,8 @@
         return "<div class='comment'><span class='comment_body'>"+cbody+"</span></div><br>\n"
     }
     function getComments(d){
-        console.log(d);
         var my_comments = "";
         for(comment in d){
-            console.log(d[comment]["comment_body"]);
             my_comments = my_comments+createOneComment(d[comment]["comment_body"]);
         }
         return my_comments;
@@ -51,7 +49,6 @@
     }
     $(function(){
         $("#submit").on("click", function(){
-            console.log($("#search").val())
             var t = $("#search").val();
             $.post("/movies", {title: t}, function(data, status){
                 $("#results").empty().append(createResult(data));
@@ -64,8 +61,6 @@
                             for(i in data){
                                 $("#results").append(createResult(data[i]));
                                 $.get("/comments", {movie_id: data[i]["id"]}, function(deta, status){
-				    console.log("id: "+data[i]["id"]);
-				    console.log(deta);
 				    if (deta.length > 0){
                                         $("#comments"+deta[0]["movie_id"]).append(getComments(deta));
 				    }
@@ -86,7 +81,6 @@
             comments.append(createOneComment(data["comment_body"]));
         }).fail(
             function(jqXHR, textStatus, errorThrown){
-                console.log(jqXHR.responseText);
             }
         )
     });

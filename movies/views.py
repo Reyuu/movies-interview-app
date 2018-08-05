@@ -31,9 +31,7 @@ def comment(request):
         if (movie_id == "") or (comment == ""):
             return JsonResponse({"error": "empty argument"}, status=400)
         #check if movie exists in database
-        print(movie_id)
         entry = Movie.objects.filter(id=movie_id)
-        print(entry.exists())
         if not(entry.exists()):
             return JsonResponse({"error": "movie not found in database"}, status=400)
         #create new Comment object
@@ -84,7 +82,6 @@ def movie(request):
         title = request.POST.get("title", "")
         #if title is blank space return error
         if title == "":
-            print("no title")
             return JsonResponse({"error": "no title"}, status=400)
         #get movie
         movie = get_movie(title)
@@ -102,9 +99,7 @@ def movie(request):
         org_movie = dict(movie)
         #check if anywhere is N/A and make that field blank
         for key in movie.keys():
-            print("Key: %s" % key)
             if movie[key] == "N/A":
-                print("N/A present")
                 movie[key] = ""
 
         #make Ratings proper formatting
@@ -123,18 +118,12 @@ def movie(request):
         #make dates model friendly
         movie["Released"] = datetime.strptime(movie["Released"], "%d %b %Y").strftime("%Y-%m-%d")
         movie["DVD"] = datetime.strptime(movie["DVD"], "%d %b %Y").strftime("%Y-%m-%d")
-        print("-------------")
-        print(movie)
         serializer = MovieSerializer(data=movie)
-        print("after serializer")
         if serializer.is_valid():
-            print("inside serialization")
             serializer.save()
             resp = {"fetched_api_data": org_movie}
             resp.update(serializer.data)
-            print("after resp", resp)
             return JsonResponse(resp, status=201, safe=False)
-        print(serializer.errors)
         return JsonResponse(serializer.errors, status=400)
 
     if request.method == "GET":

@@ -46,7 +46,6 @@
             <button id="'+da["id"]+'" class="comment_button">Comment</button>\
             <div id="comments'+da["id"]+'" class="comments">\
             <span>Comments:</span>\
-            '+getComments(da["id"])+'\
             </div>\
         </div>'
     }
@@ -55,21 +54,21 @@
             console.log($("#search").val())
             var t = $("#search").val();
             $.post("/movies", {title: t}, function(data, status){
-                console.log(data);
                 $("#results").empty().append(createResult(data));
             }
             ).fail(
                 function(jqXHR, textStatus, errorThrown){
-                    console.log(jqXHR.status);
                     if (jqXHR.status >= 400){
                         $.get("/movies", {title: t},function(data, status){
-                            console.log(data);
                             $("#results").empty();
                             for(i in data){
-                                console.log(i);
                                 $("#results").append(createResult(data[i]));
                                 $.get("/comments", {movie_id: data[i]["id"]}, function(deta, status){
-                                    $("#comments"+data[i]["id"]).append(getComments(deta));
+				    console.log("id: "+data[i]["id"]);
+				    console.log(deta);
+				    if (deta.length > 0){
+                                        $("#comments"+deta[0]["movie_id"]).append(getComments(deta));
+				    }
                                 });
                             }
                         });

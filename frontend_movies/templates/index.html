@@ -23,8 +23,26 @@
         }
     </style>
     <script>
-    function createOneComment(cbody){
-        return "<div class='comment'><span class='comment_body'>"+cbody+"</span></div><br>\n"
+//musache.js escape func
+var entityMap = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;',
+  '/': '&#x2F;',
+  '`': '&#x60;',
+  '=': '&#x3D;'
+};
+
+function escapeHtml (string) {
+  return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+    return entityMap[s];
+  });
+}
+    
+function createOneComment(cbody){
+        return "<div class='comment'><span class='comment_body'>"+escapeHtml(cbody)+"</span></div><br>\n"
     }
     function getComments(d){
         var my_comments = "";
